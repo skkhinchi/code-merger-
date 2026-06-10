@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import { parseCommand } from "./agent.js";
 import {
+  compareBranches,
   createPR,
   getRepoDetails,
   listBranches,
@@ -17,6 +18,7 @@ import {
   getEmailSummaryCache,
   setEmailSummaryCache,
 } from "./emailSummaryCache.js";
+import { getLangSmithProject, isLangSmithEnabled } from "./openaiClient.js";
 import { logError, logInfo } from "./logger.js";
 import {
   convertToSpeech,
@@ -341,6 +343,18 @@ app.post("/command", async (req, res) => {
       });
     }
 
+    let fileChanges = null;
+    try {
+      fileChanges = await compareBranches(
+        mergeSource,
+        mergeTarget,
+        owner,
+        repo
+      );
+    } catch (compareErr) {
+      logError("compare-branches", compareErr, { owner, repo, mergeSource, mergeTarget });
+    }
+
     const pr = await createPR(mergeSource, mergeTarget, owner, repo);
 
     pendingMerge = {
@@ -349,6 +363,7 @@ app.post("/command", async (req, res) => {
       target: mergeTarget,
       owner,
       repo,
+      fileChanges,
     };
 
     return res.json({
@@ -357,6 +372,7 @@ app.post("/command", async (req, res) => {
       target: mergeTarget,
       owner,
       repo,
+      fileChanges,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
@@ -395,4 +411,9 @@ const PORT = Number(process.env.PORT) || 5001;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} (http://localhost:${PORT})`);
+  if (isLangSmithEnabled()) {
+    console.log(
+      `LangSmith tracing enabled → project "${getLangSmithProject()}" (https://smith.langchain.com)`
+    );
+  }
 });

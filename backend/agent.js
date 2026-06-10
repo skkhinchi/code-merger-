@@ -1,8 +1,5 @@
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { getOpenAI } from "./openaiClient.js";
+import { withTracing } from "./langsmith.js";
 
 function parseJsonFromAssistantText(text) {
   const trimmed = text.trim();
@@ -20,7 +17,8 @@ function parseJsonFromAssistantText(text) {
   }
 }
 
-export async function parseCommand(userInput) {
+async function parseCommandImpl(userInput) {
+  const openai = getOpenAI();
   const prompt = `
 Convert the user's git merge command into JSON.
 
@@ -56,3 +54,9 @@ Command: ${userInput}
     return parseJsonFromAssistantText(content);
   }
 }
+
+export const parseCommand = withTracing(parseCommandImpl, {
+  name: "parse-merge-command",
+  run_type: "chain",
+  metadata: { feature: "devops-merge" },
+});

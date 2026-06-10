@@ -1,9 +1,5 @@
-import OpenAI from "openai";
+import { getOpenAI } from "./openaiClient.js";
 import { mergePriorityWithRules, normalizePriority } from "./emailPriority.js";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 /**
  * @param {string} text
@@ -63,6 +59,7 @@ One entry in "items" per email below, same order. Priority must be HIGH, MEDIUM,
 Emails:
 ${JSON.stringify(payload, null, 2)}`;
 
+  const openai = getOpenAI();
   const res = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: userContent }],
