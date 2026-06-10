@@ -1,0 +1,162 @@
+.repo-skeleton--panel {
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 12px;
+  padding: 22px;
+  backdrop-filter: blur(12px);
+}
+
+.repo-skeleton__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.repo-skeleton__lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.repo-skeleton__bar {
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: repo-shimmer 1.4s ease-in-out infinite;
+}
+
+.repo-skeleton__bar--title {
+  height: 28px;
+  width: 55%;
+}
+
+.repo-skeleton__bar--desc {
+  height: 14px;
+  width: 80%;
+}
+
+.repo-skeleton__bar--desc-short {
+  height: 14px;
+  width: 45%;
+}
+
+.repo-skeleton__bar--btn {
+  width: 120px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
+.repo-skeleton__bar--section {
+  height: 22px;
+  width: 140px;
+  margin-bottom: 8px;
+}
+
+.repo-skeleton__bar--subtitle {
+  height: 14px;
+  width: 70%;
+  margin-bottom: 20px;
+}
+
+.repo-skeleton__bar--label {
+  height: 12px;
+  width: 90px;
+  margin-bottom: 8px;
+}
+
+.repo-skeleton__bar--select {
+  height: 42px;
+  width: 100%;
+}
+
+.repo-skeleton__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.repo-skeleton__chip {
+  width: 72px;
+  height: 26px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: repo-shimmer 1.4s ease-in-out infinite;
+}
+
+.repo-skeleton__branch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.repo-skeleton__field {
+  min-width: 0;
+}
+
+.repo-skeleton__loader-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.repo-skeleton__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(129, 140, 248, 0.2);
+  border-top-color: #818cf8;
+  border-radius: 50%;
+  animation: repo-spin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+
+.repo-skeleton__loader-text {
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+@keyframes repo-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes repo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .repo-skeleton__branch-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .repo-skeleton__header {
+    flex-direction: column;
+  }
+
+  .repo-skeleton__bar--btn {
+    width: 100%;
+  }
+}

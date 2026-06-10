@@ -1,0 +1,215 @@
+.credit-badge {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 20;
+  pointer-events: none;
+  animation: credit-float 5s ease-in-out infinite;
+}
+
+.credit-badge__ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: conic-gradient(#6366f1, #a78bfa, #22d3ee, #818cf8, #6366f1);
+  opacity: 0.7;
+  animation: credit-spin 3.5s linear infinite;
+}
+
+.credit-badge__ring::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 16px;
+  background: #0b1220;
+}
+
+.credit-badge__card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(99, 102, 241, 0.12);
+  pointer-events: auto;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.credit-badge__card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 56px rgba(129, 140, 248, 0.22);
+}
+
+.credit-badge__avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  overflow: hidden;
+}
+
+.credit-badge__avatar-text {
+  position: relative;
+  z-index: 1;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
+}
+
+.credit-badge__avatar-pulse {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 70%
+  );
+  animation: credit-shine 2.5s ease-in-out infinite;
+}
+
+.credit-badge__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.credit-badge__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+}
+
+.credit-badge__spark {
+  display: inline-block;
+  color: #a78bfa;
+  animation: credit-sparkle 2s ease-in-out infinite;
+}
+
+.credit-badge__name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.credit-badge__char {
+  display: inline-block;
+  background: linear-gradient(
+    180deg,
+    #f8fafc 0%,
+    #c7d2fe 35%,
+    #e9d5ff 65%,
+    #a5b4fc 100%
+  );
+  background-size: 100% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: credit-letter-wave 2.4s ease-in-out infinite;
+}
+
+@keyframes credit-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes credit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes credit-shine {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes credit-sparkle {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.9) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(90deg);
+  }
+}
+
+@keyframes credit-letter-wave {
+  0%,
+  100% {
+    transform: translateY(0);
+    background-position: 0% 0%;
+  }
+  50% {
+    transform: translateY(-3px);
+    background-position: 0% 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .credit-badge {
+    right: 16px;
+    bottom: 16px;
+    transform: scale(0.92);
+    transform-origin: bottom right;
+    animation: credit-float-mobile 5s ease-in-out infinite;
+  }
+
+  .credit-badge__card {
+    padding: 8px 12px 8px 8px;
+    gap: 10px;
+  }
+
+  .credit-badge__avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .credit-badge__name {
+    font-size: 0.85rem;
+  }
+}
+
+@keyframes credit-float-mobile {
+  0%,
+  100% {
+    transform: scale(0.92) translateY(0);
+  }
+  50% {
+    transform: scale(0.92) translateY(-5px);
+  }
+}
