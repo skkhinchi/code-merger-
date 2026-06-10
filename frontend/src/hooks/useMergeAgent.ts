@@ -7,6 +7,7 @@ import type {
   GitHubRepo,
   GitHubRepoDetails,
   GitHubReposPage,
+  MergeFileChanges,
 } from '../types/github'
 import { addRecentRepo, getRecentRepos } from '../utils/recentRepos'
 
@@ -21,6 +22,7 @@ type CommandResponse = {
   target?: string
   owner?: string
   repo?: string
+  fileChanges?: MergeFileChanges | null
 }
 
 function handleAxiosError(e: unknown): string {
@@ -74,6 +76,9 @@ export function useMergeAgent() {
   const [input, setInput] = useState('')
 
   const [msg, setMsg] = useState('')
+  const [mergeFileChanges, setMergeFileChanges] = useState<MergeFileChanges | null>(null)
+  const [pendingMergeSource, setPendingMergeSource] = useState('')
+  const [pendingMergeTarget, setPendingMergeTarget] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState(false)
   const [mergeSuccess, setMergeSuccess] = useState(false)
@@ -244,6 +249,9 @@ export function useMergeAgent() {
 
     setLoading(true)
     setMergeSuccess(false)
+    setMergeFileChanges(null)
+    setPendingMergeSource('')
+    setPendingMergeTarget('')
     try {
       const body: Record<string, string> = {
         owner: selectedRepo.owner,
@@ -259,6 +267,9 @@ export function useMergeAgent() {
 
       const res = await axios.post<CommandResponse>(`${baseUrl}/command`, body)
       setMsg(res.data.message)
+      setMergeFileChanges(res.data.fileChanges ?? null)
+      setPendingMergeSource(res.data.source ?? sourceBranch)
+      setPendingMergeTarget(res.data.target ?? targetBranch)
       setShowModal(true)
     } catch (e) {
       setMsg(handleAxiosError(e))
@@ -289,6 +300,9 @@ export function useMergeAgent() {
 
   const cancelModal = () => {
     setShowModal(false)
+    setMergeFileChanges(null)
+    setPendingMergeSource('')
+    setPendingMergeTarget('')
   }
 
   return {
@@ -317,6 +331,9 @@ export function useMergeAgent() {
     input,
     setInput,
     msg,
+    mergeFileChanges,
+    pendingMergeSource,
+    pendingMergeTarget,
     loading,
     showModal,
     mergeSuccess,
