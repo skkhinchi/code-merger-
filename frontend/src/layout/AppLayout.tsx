@@ -1,5 +1,8 @@
 import { Outlet, Link as RouterLink } from 'react-router-dom'
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
+import { AppBar, Toolbar, Box } from '@mui/material'
+import AiLogo from '../components/AiLogo'
+import AppFooter from '../components/AppFooter'
+import '../components/AiLogo.css'
 
 export default function AppLayout() {
   return (
@@ -12,39 +15,24 @@ export default function AppLayout() {
           backdropFilter: 'blur(12px)',
           borderBottom: 1,
           borderColor: 'divider',
+          zIndex: 10,
         }}
       >
         <Toolbar>
-          <Typography
-            variant="h6"
-            component={RouterLink}
-            to="/"
-            sx={{
-              flexGrow: 1,
-              fontWeight: 700,
-              textDecoration: 'none',
-              color: 'inherit',
-            }}
-          >
-            Code Merger
-          </Typography>
-          <Button component={RouterLink} to="/" color="inherit" sx={{ mr: 1 }}>
-            DevOps
-          </Button>
-          <Button
-            component={RouterLink}
-            to="/emails"
-            variant="outlined"
-            color="inherit"
-            size="small"
-          >
-            Email Summary
-          </Button>
+          <RouterLink to="/" className="ai-brand">
+            <AiLogo size="sm" />
+            <span className="ai-brand__text">DevOps AI</span>
+            <span className="ai-brand__badge">
+              <span className="ai-brand__dot" />
+              Live
+            </span>
+          </RouterLink>
         </Toolbar>
       </AppBar>
       <Box component="main" sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Outlet />
       </Box>
+      <AppFooter />
     </Box>
   )
 }
