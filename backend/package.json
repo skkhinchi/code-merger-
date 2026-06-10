@@ -18,6 +18,7 @@
     "express": "^5.2.1",
     "googleapis": "^171.4.0",
     "html-to-text": "^9.0.5",
+    "langsmith": "^0.7.5",
     "openai": "^6.32.0"
   }
 }

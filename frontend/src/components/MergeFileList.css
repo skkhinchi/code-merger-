@@ -1,0 +1,172 @@
+.merge-files {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.merge-files__intro {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.merge-files__intro strong {
+  color: #e0e7ff;
+}
+
+.merge-files__commits {
+  color: #64748b;
+}
+
+.merge-files__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.merge-files__pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.merge-files__pill--total {
+  background: rgba(99, 102, 241, 0.2);
+  color: #c7d2fe;
+}
+
+.merge-files__pill--added {
+  background: rgba(34, 197, 94, 0.15);
+  color: #86efac;
+}
+
+.merge-files__pill--modified {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fcd34d;
+}
+
+.merge-files__pill--removed {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+
+.merge-files__pill--renamed {
+  background: rgba(34, 211, 238, 0.12);
+  color: #67e8f9;
+}
+
+.merge-files__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+  background: rgba(11, 18, 32, 0.5);
+}
+
+.merge-files__list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.merge-files__list::-webkit-scrollbar-thumb {
+  background: rgba(129, 140, 248, 0.35);
+  border-radius: 4px;
+}
+
+.merge-files__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  font-size: 0.78rem;
+}
+
+.merge-files__item:last-child {
+  border-bottom: none;
+}
+
+.merge-files__status {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.merge-files__status--added {
+  background: rgba(34, 197, 94, 0.15);
+  color: #86efac;
+}
+
+.merge-files__status--modified {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fcd34d;
+}
+
+.merge-files__status--removed {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+
+.merge-files__status--renamed {
+  background: rgba(34, 211, 238, 0.12);
+  color: #67e8f9;
+}
+
+.merge-files__path {
+  color: #e2e8f0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+}
+
+.merge-files__path-old {
+  color: #64748b;
+  text-decoration: line-through;
+}
+
+.merge-files__path-arrow {
+  color: #64748b;
+}
+
+.merge-files__diff {
+  display: flex;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-family: ui-monospace, monospace;
+  flex-shrink: 0;
+}
+
+.merge-files__add {
+  color: #86efac;
+}
+
+.merge-files__del {
+  color: #fca5a5;
+}
+
+.merge-files__more,
+.merge-files__empty,
+.merge-files__unavailable {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.home__confirm-panel--with-files {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.home__confirm-panel--with-files .home__confirm-actions {
+  justify-content: flex-end;
+  margin-top: 4px;
+}
