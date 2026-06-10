@@ -2,7 +2,13 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import { parseCommand } from "./agent.js";
-import { createPR, mergePR } from "./github.js";
+import {
+  createPR,
+  getRepoDetails,
+  listBranches,
+  listRepos,
+  mergePR,
+} from "./github.js";
 import { summarizeEmails } from "./aiEmailService.js";
 import { runEmailAgentCommand } from "./emailAgentService.js";
 import { setEmailContext } from "./emailAgentContext.js";
@@ -267,33 +273,91 @@ app.post("/email-agent", async (req, res) => {
   }
 });
 
-/** @type {{ prNumber: number, source: string, target: string } | null} */
+/** @type {{ prNumber: number, source: string, target: string, owner: string, repo: string } | null} */
 let pendingMerge = null;
+
+app.get("/github/repos", async (req, res) => {
+  try {
+    const page = req.query.page;
+    const perPage = req.query.per_page ?? req.query.perPage;
+    const search = req.query.search ?? req.query.q ?? "";
+    const result = await listRepos({ page, perPage, search });
+    res.json(result);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ message });
+  }
+});
+
+app.get("/github/repos/:owner/:repo", async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const details = await getRepoDetails(owner, repo);
+    res.json({ repo: details });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ message });
+  }
+});
+
+app.get("/github/repos/:owner/:repo/branches", async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const branches = await listBranches(owner, repo);
+    res.json({ branches });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ message });
+  }
+});
 
 // Step 1: command parse + PR create
 app.post("/command", async (req, res) => {
   try {
-    const { input } = req.body;
+    const { input, owner, repo, source, target } = req.body ?? {};
 
-    const parsed = await parseCommand(input);
-
-    if (parsed.action === "merge") {
-      const pr = await createPR(parsed.source, parsed.target);
-
-      pendingMerge = {
-        prNumber: pr.number,
-        source: parsed.source,
-        target: parsed.target,
-      };
-
-      return res.json({
-        message: `PR created: #${pr.number}. Confirm merge?`,
-        source: parsed.source,
-        target: parsed.target,
+    if (!owner || !repo) {
+      return res.status(400).json({
+        message: "Request body must include `owner` and `repo`.",
       });
     }
 
-    res.json({ message: "Unknown command" });
+    let mergeSource = source;
+    let mergeTarget = target;
+
+    if (input && (!mergeSource || !mergeTarget)) {
+      const parsed = await parseCommand(input);
+      if (parsed.action !== "merge") {
+        return res.json({ message: "Unknown command" });
+      }
+      mergeSource = parsed.source;
+      mergeTarget = parsed.target;
+    }
+
+    if (!mergeSource || !mergeTarget) {
+      return res.status(400).json({
+        message:
+          "Provide branch names via `source` and `target`, or a natural-language `input`.",
+      });
+    }
+
+    const pr = await createPR(mergeSource, mergeTarget, owner, repo);
+
+    pendingMerge = {
+      prNumber: pr.number,
+      source: mergeSource,
+      target: mergeTarget,
+      owner,
+      repo,
+    };
+
+    return res.json({
+      message: `PR created in ${owner}/${repo}: #${pr.number}. Confirm merge?`,
+      source: mergeSource,
+      target: mergeTarget,
+      owner,
+      repo,
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     res.status(500).json({ message });
@@ -307,16 +371,18 @@ app.post("/confirm", async (req, res) => {
       return res.json({ message: "No pending PR" });
     }
 
-    const { prNumber, source, target } = pendingMerge;
+    const { prNumber, source, target, owner, repo } = pendingMerge;
 
-    await mergePR(prNumber);
+    await mergePR(prNumber, owner, repo);
 
     pendingMerge = null;
 
     res.json({
-      message: `Success: merged branch "${source}" into "${target}".`,
+      message: `Success: merged "${source}" into "${target}" in ${owner}/${repo}.`,
       source,
       target,
+      owner,
+      repo,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

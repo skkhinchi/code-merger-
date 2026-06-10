@@ -1,0 +1,126 @@
+.ai-logo {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ai-logo--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.ai-logo--md {
+  width: 36px;
+  height: 36px;
+}
+
+.ai-logo__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(129, 140, 248, 0.5);
+}
+
+.ai-logo__ring--outer {
+  animation: ai-pulse-ring 2.4s ease-out infinite;
+}
+
+.ai-logo__ring--inner {
+  inset: 4px;
+  border-color: rgba(167, 139, 250, 0.4);
+  animation: ai-pulse-ring 2.4s ease-out infinite 0.8s;
+}
+
+.ai-logo__core {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #818cf8, #a78bfa);
+  animation: ai-core-glow 2s ease-in-out infinite;
+}
+
+.ai-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ai-brand__text {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #f8fafc 0%, #c7d2fe 40%, #e9d5ff 60%, #f8fafc 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ai-shimmer 5s linear infinite;
+}
+
+.ai-brand__badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(129, 140, 248, 0.35);
+  color: #a5b4fc;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-brand__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: ai-status-blink 2s ease-in-out infinite;
+}
+
+@keyframes ai-shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes ai-pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+@keyframes ai-core-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(129, 140, 248, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(167, 139, 250, 0.9);
+  }
+}
+
+@keyframes ai-status-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

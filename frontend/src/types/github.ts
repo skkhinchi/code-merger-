@@ -1,0 +1,36 @@
+export type GitHubRepo = {
+  owner: string
+  name: string
+  fullName: string
+  private: boolean
+  description?: string | null
+  language?: string | null
+  updatedAt?: string | null
+}
+
+export type GitHubReposPage = {
+  repos: GitHubRepo[]
+  page: number
+  perPage: number
+  hasMore: boolean
+  totalCount: number | null
+}
+
+export type GitHubRepoDetails = {
+  owner: string
+  name: string
+  fullName: string
+  description: string | null
+  defaultBranch: string
+  language: string | null
+  stars: number
+  forks: number
+  openIssues: number
+  private: boolean
+  updatedAt: string | null
+  htmlUrl: string
+}
+
+export type GitHubBranch = {
+  name: string
+}
