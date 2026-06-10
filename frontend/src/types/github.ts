@@ -34,3 +34,26 @@ export type GitHubRepoDetails = {
 export type GitHubBranch = {
   name: string
 }
+
+export type MergeFileChange = {
+  filename: string
+  previousFilename: string | null
+  status: string
+  additions: number
+  deletions: number
+  changes: number
+}
+
+export type MergeFileSummary = {
+  total: number
+  added: number
+  modified: number
+  removed: number
+  renamed: number
+}
+
+export type MergeFileChanges = {
+  files: MergeFileChange[]
+  summary: MergeFileSummary
+  commits: number
+}

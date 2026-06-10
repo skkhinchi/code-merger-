@@ -1,12 +1,8 @@
-import OpenAI from "openai";
+import { getOpenAI } from "./openaiClient.js";
 import {
   getEmailContext,
   setLastAgentResponse,
 } from "./emailAgentContext.js";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 function parseJsonStrict(text) {
   const trimmed = text.trim();
@@ -103,6 +99,7 @@ Return JSON only with this shape:
 
 If "this email" / "the first" with no other cue, use index 0. Match ordinal words (first=0, second=1) when possible.`;
 
+  const openai = getOpenAI();
   const res = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: userContent }],
@@ -153,6 +150,7 @@ ${JSON.stringify(compact, null, 2)}
 Answer concisely in plain language. Return JSON only:
 {"message":string}`;
 
+  const openai = getOpenAI();
   const res = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: userContent }],
