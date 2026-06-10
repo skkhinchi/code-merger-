@@ -177,6 +177,45 @@ export async function listBranches(owner, repo) {
   }
 }
 
+export async function compareBranches(source, target, owner, repo) {
+  const path = repoPath(owner, repo);
+  const compareRef = `${encodeURIComponent(target)}...${encodeURIComponent(source)}`;
+  try {
+    const res = await axios.get(`${baseURL}/repos/${path}/compare/${compareRef}`, {
+      headers: githubHeaders(),
+    });
+    const rawFiles = res.data?.files ?? [];
+    const files = rawFiles
+      .filter((f) => f.status && f.status !== "unchanged")
+      .map((f) => ({
+        filename: f.filename ?? "",
+        previousFilename: f.previous_filename ?? null,
+        status: f.status,
+        additions: f.additions ?? 0,
+        deletions: f.deletions ?? 0,
+        changes: f.changes ?? 0,
+      }));
+
+    const summary = {
+      total: files.length,
+      added: files.filter((f) => f.status === "added").length,
+      modified: files.filter((f) =>
+        ["modified", "changed", "copied"].includes(f.status)
+      ).length,
+      removed: files.filter((f) => f.status === "removed").length,
+      renamed: files.filter((f) => f.status === "renamed").length,
+    };
+
+    return {
+      files,
+      summary,
+      commits: res.data?.total_commits ?? 0,
+    };
+  } catch (err) {
+    throw new Error(formatGithubAxiosError(err));
+  }
+}
+
 export async function createPR(source, target, owner, repo) {
   const path = repoPath(owner, repo);
   try {

@@ -1,8 +1,4 @@
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { getOpenAI } from "./openaiClient.js";
 
 /** OpenAI TTS input cap (model limit is typically 4096). */
 const MAX_TTS_CHARS = 4096;
@@ -125,6 +121,7 @@ export async function convertToSpeech(text) {
       ? `${trimmed.slice(0, MAX_TTS_CHARS)}…`
       : trimmed;
 
+  const openai = getOpenAI();
   const response = await openai.audio.speech.create({
     model: "gpt-4o-mini-tts",
     voice: "alloy",

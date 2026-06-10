@@ -1,5 +1,6 @@
 import AiBackground from './components/AiBackground'
 import AiLogo from './components/AiLogo'
+import MergeFileList from './components/MergeFileList'
 import { BranchMergeSkeleton, RepoDetailsSkeleton } from './components/RepoContentSkeleton'
 import RepoPicker from './components/RepoPicker'
 import { useMergeAgent } from './hooks/useMergeAgent'
@@ -33,15 +34,18 @@ export default function Home() {
     branches,
     branchesLoading,
     branchesError,
-    sourceBranch,
     setSourceBranch,
-    targetBranch,
     setTargetBranch,
     input,
     setInput,
     msg,
+    mergeFileChanges,
+    pendingMergeSource,
+    pendingMergeTarget,
     loading,
     showModal,
+    sourceBranch,
+    targetBranch,
     mergeSuccess,
     sendCommand,
     confirmMerge,
@@ -139,11 +143,19 @@ export default function Home() {
           ) : (
             <>
               {showModal && (
-                <section className="home__confirm-panel" role="alert">
+                <section
+                  className="home__confirm-panel home__confirm-panel--with-files"
+                  role="alert"
+                >
                   <div className="home__confirm-content">
                     <h2 className="home__confirm-title">Confirm merge</h2>
                     <p className="home__confirm-repo">{selectedRepo.fullName}</p>
                     <p className="home__confirm-text">{msg}</p>
+                    <MergeFileList
+                      source={pendingMergeSource || sourceBranch}
+                      target={pendingMergeTarget || targetBranch}
+                      fileChanges={mergeFileChanges}
+                    />
                   </div>
                   <div className="home__confirm-actions">
                     <button
