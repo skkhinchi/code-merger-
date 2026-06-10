@@ -1,7 +1,9 @@
+const DEFAULT_DEV_API = 'http://localhost:5001'
+
 /**
  * Base URL for API requests.
  * - If `VITE_API_URL` is set → use it (trim trailing slash).
- * - In dev with no URL → use `/api` so Vite proxies to the backend (see vite.config.ts).
+ * - In dev with no URL → `http://localhost:5001` (backend default port).
  * - In production builds, set `VITE_API_URL` to your API origin.
  */
 export function apiBaseUrl(): string {
@@ -10,7 +12,7 @@ export function apiBaseUrl(): string {
     return raw.replace(/\/$/, '')
   }
   if (import.meta.env.DEV) {
-    return '/api'
+    return DEFAULT_DEV_API
   }
   return ''
 }
